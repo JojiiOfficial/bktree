@@ -1,6 +1,6 @@
 mod distance;
 
-use std::{collections::VecDeque, ops::Sub};
+use std::{collections::VecDeque, iter::FromIterator, ops::Sub};
 
 use serde::{Deserialize, Serialize};
 
@@ -113,6 +113,15 @@ impl<T: AsRef<str>> BkTree<T> {
             queue.push(&**root);
         }
         Iter { queue }
+    }
+}
+
+impl<T: AsRef<str>> FromIterator<T> for BkTree<T> {
+    #[inline]
+    fn from_iter<A: IntoIterator<Item = T>>(iter: A) -> Self {
+        let mut bk = BkTree::new();
+        bk.insert_all(iter);
+        bk
     }
 }
 
