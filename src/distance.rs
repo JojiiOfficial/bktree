@@ -1,8 +1,4 @@
-pub fn hamming_distance<T: num::PrimInt>(a: &T, b: &T) -> isize {
-    (*a ^ *b).count_ones() as isize
-}
-
-pub fn levenshtein_distance<S: AsRef<str>>(a: &S, b: &S) -> isize {
+pub fn levenshtein_distance<S: AsRef<str>>(a: &S, b: &S) -> usize {
     let a = a.as_ref();
     let b = b.as_ref();
 
@@ -14,11 +10,11 @@ pub fn levenshtein_distance<S: AsRef<str>>(a: &S, b: &S) -> isize {
     let b_len = b.chars().count();
 
     if a_len == 0 {
-        return b_len as isize;
+        return b_len;
     }
 
     if b_len == 0 {
-        return a_len as isize;
+        return a_len;
     }
 
     let mut res = 0;
@@ -49,5 +45,5 @@ pub fn levenshtein_distance<S: AsRef<str>>(a: &S, b: &S) -> isize {
         }
     }
 
-    res as isize
+    res
 }
