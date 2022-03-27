@@ -71,7 +71,7 @@ impl<T: AsRef<str>> BkTree<T> {
     }
     /// Find the closest elements to a given value present in the BK-tree
     /// Returns pairs of element references and distances
-    pub fn find(&self, val: &T, max_dist: usize) -> Vec<(&T, usize)> {
+    pub fn find<S: AsRef<str>>(&self, val: S, max_dist: usize) -> Vec<(&T, usize)> {
         if self.root.is_none() {
             return vec![];
         }
@@ -82,7 +82,7 @@ impl<T: AsRef<str>> BkTree<T> {
         candidates.push_back(self.root.as_ref().unwrap());
 
         while let Some(n) = candidates.pop_front() {
-            let distance = distance::levenshtein_distance(&n.word, &val);
+            let distance = distance::levenshtein_distance(&n.word.as_ref(), &val.as_ref());
             if distance <= max_dist {
                 found.push((&n.word, distance));
             }
@@ -187,7 +187,7 @@ mod tests {
         bk.insert_all(vec![
             "book", "books", "boo", "boon", "cook", "cake", "cape", "cart",
         ]);
-        let (words, dists): (Vec<&str>, Vec<isize>) = bk.find("bo", 2).into_iter().unzip();
+        let (words, dists): (Vec<&str>, Vec<usize>) = bk.find("bo", 2).into_iter().unzip();
         assert_eq!(words, ["book", "boo", "boon"]);
         assert_eq!(dists, [2, 1, 2]);
     }
